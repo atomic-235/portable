@@ -37,6 +37,11 @@
           shared.homeManagerModules.shell-tools
           shared.homeManagerModules.neovim
           shared.homeManagerModules.lazygit
+          shared.homeManagerModules.opencode
+          shared.homeManagerModules.bash
+          shared.homeManagerModules.yazi
+          shared.homeManagerModules.delta
+          shared.homeManagerModules.packages
         ];
       };
     };
