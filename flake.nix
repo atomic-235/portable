@@ -31,6 +31,10 @@
             home.stateVersion = "26.05";
             programs.home-manager.enable = true;
             xdg.enable = true;
+            home.sessionVariables = {
+              LANG = "C.UTF-8";
+              LC_ALL = "C.UTF-8";
+            };
           }
           shared.homeManagerModules.btop
           shared.homeManagerModules.starship
