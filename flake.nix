@@ -16,7 +16,10 @@
   outputs = { self, nixpkgs, home-manager, shared, ... }:
     {
       homeConfigurations.user = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          overlays = [ shared.defaultOverlay ];
+        };
         extraSpecialArgs = {
           inherit shared;
           nvimRelativePath = "portable/submodules/shared/nvim";

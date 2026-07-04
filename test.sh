@@ -35,9 +35,12 @@ ls -la portable/submodules/shared/nvim/init.lua
 echo "=== Nix version ==="
 nix --version
 
+echo "=== Clean any existing profile conflicts ==="
+nix-env -e man-db 2>/dev/null || true
+
 echo "=== Home-manager switch ==="
 cd $HOME/portable
-nix run github:nix-community/home-manager -- switch --flake .#user 2>&1
+nix run github:nix-community/home-manager -- switch --flake .#user --impure 2>&1
 
 echo "=== Verify symlinks ==="
 echo "nvim:"
