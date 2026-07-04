@@ -34,6 +34,8 @@
             home.sessionVariables = {
               LANG = "C.UTF-8";
               LC_ALL = "C.UTF-8";
+              SESSIONIZER_AI_CMD = "opencode";
+              SESSIONIZER_AI_CMD_WORK = "opencode";
             };
           }
           shared.homeManagerModules.btop
