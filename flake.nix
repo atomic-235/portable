@@ -42,6 +42,7 @@
           shared.homeManagerModules.yazi
           shared.homeManagerModules.delta
           shared.homeManagerModules.packages
+          shared.homeManagerModules.tmux
         ];
       };
     };
