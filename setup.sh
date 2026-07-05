@@ -25,7 +25,9 @@ if ! command -v nix-user-chroot &>/dev/null; then
     aarch64) NP_ARCH="aarch64-unknown-linux-musl" ;;
     *) echo "ERROR: Unsupported arch: $ARCH" >&2; exit 1 ;;
   esac
-  curl -L "https://github.com/nix-community/nix-user-chroot/releases/latest/download/nix-user-chroot-${NP_ARCH}" \
+  # Get latest version from GitHub API
+  NP_VERSION=$(curl -sL https://api.github.com/repos/nix-community/nix-user-chroot/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
+  curl -L "https://github.com/nix-community/nix-user-chroot/releases/download/${NP_VERSION}/nix-user-chroot-bin-${NP_VERSION}-${NP_ARCH}" \
     -o "$BIN_DIR/nix-user-chroot"
   chmod +x "$BIN_DIR/nix-user-chroot"
 fi
