@@ -8,6 +8,14 @@ PORTABLE_DIR="${PORTABLE_DIR:-$HOME/portable}"
 
 echo "=== Installing nix (single-user) ==="
 if ! command -v nix &>/dev/null; then
+  # nix installer needs nixbld group + users for builds
+  if ! getent group nixbld &>/dev/null; then
+    groupadd nixbld
+    for i in $(seq 1 10); do
+      useradd -r -g nixbld -G nixbld -d /var/empty -s /usr/sbin/nologin nixbld$i 2>/dev/null || true
+    done
+  fi
+  mkdir -m 0755 /nix 2>/dev/null || true
   sh <(curl -L https://nixos.org/nix/install) --no-daemon
   # Source nix profile
   if [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
