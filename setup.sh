@@ -74,13 +74,15 @@ if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
 fi
 BPEOF
 
+echo "=== Activating in ~/.bashrc ==="
+if ! grep -q 'portable/activate.sh' "$HOME/.bashrc" 2>/dev/null; then
+  echo '[ -f ~/portable/activate.sh ] && source ~/portable/activate.sh' >> "$HOME/.bashrc"
+  echo "Added activation line to ~/.bashrc"
+fi
+
 echo ""
 echo "=== Setup complete ==="
-echo ""
-echo "Add this line to your ~/.bashrc to activate the environment:"
-echo "  [ -f ~/portable/activate.sh ] && source ~/portable/activate.sh"
-echo ""
-echo "Then restart your shell: exec bash -l"
+echo "Restart your shell: exec bash -l"
 echo ""
 echo "To update later: $PORTABLE_DIR/update.sh"
 echo ""
