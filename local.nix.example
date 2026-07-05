@@ -7,6 +7,14 @@
 { ... }:
 
 {
+  # === AI model tiers ===
+  # Sets AI_MODEL_FAST, AI_MODEL_DEFAULT env vars + ~/.config/ai/models
+  # Used by ai-commit.sh and other tools
+  programs.bash.aiModels = {
+    fast = "your-fast-model-id";
+    default = "your-default-model-id";
+  };
+
   # === Secrets directory ===
   # Set this if you use with-secrets on this machine
   # Point it to wherever your sops secrets live
