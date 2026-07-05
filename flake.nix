@@ -15,6 +15,7 @@
 
   outputs = { self, nixpkgs, home-manager, shared, ... }:
     let
+      system = "x86_64-linux";
       # local.nix is gitignored — import if it exists
       # Use --impure flag: builtins.pathExists reads the real filesystem
       # Put work configs, model names, SECRETS_DIR, custom functions there
@@ -24,9 +25,16 @@
         else [];
     in
     {
+      # Expose home-manager binary from flake lock — avoids GitHub API calls
+      # Usage: nix run .#hm -- switch --flake .#user --impure -b backup
+      apps.${system}.hm = {
+        type = "app";
+        program = "${home-manager.packages.${system}.home-manager}/bin/home-manager";
+      };
+
       homeConfigurations.user = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
-          system = "x86_64-linux";
+          inherit system;
           overlays = [ shared.defaultOverlay ];
         };
         extraSpecialArgs = {

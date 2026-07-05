@@ -68,7 +68,7 @@ fi
 echo "=== Applying home-manager config ==="
 "$NUC" "$NIX_USER_CHROOT_DIR" bash -lc "
   cd \"$PORTABLE_DIR\"
-  nix run github:nix-community/home-manager -- switch --flake .#user --impure -b backup
+  nix run .#hm -- switch --flake .#user --impure -b backup
 "
 
 echo ""
