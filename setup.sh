@@ -84,6 +84,8 @@ if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
     sleep 1
   fi
 fi
+# opencode installed via curl (not nix — segfaults on WSL2)
+[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
 BPEOF
 
 echo "=== Activating in ~/.bashrc ==="
