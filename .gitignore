@@ -1,3 +1,7 @@
 local.nix
 opencode.json
 secrets/
+.sops.yaml
+activate.sh
+ai.yaml
+test.sh
