@@ -66,8 +66,9 @@ else
 fi
 
 echo "=== Applying home-manager config ==="
-# Fresh install: remove conflicting dotfiles, HM recreates everything
-rm -rf "$HOME/.config" "$HOME/.bashrc" "$HOME/.profile" 2>/dev/null || true
+# Only remove nvim dir (HM can't overwrite dirs with symlinks)
+# HM -b backup handles all other file conflicts automatically
+rm -rf "$HOME/.config/nvim" 2>/dev/null || true
 "$NUC" "$NIX_USER_CHROOT_DIR" bash -lc "
   cd \"$PORTABLE_DIR\"
   nix run .#hm -- switch --flake .#user --impure -b backup
