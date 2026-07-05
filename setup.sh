@@ -1,34 +1,49 @@
 #!/usr/bin/env bash
-# setup.sh — first-time install on fresh VM
-# Installs nix, clones portable, applies config
+# setup.sh — first-time install on fresh VM (NO ROOT REQUIRED)
+# Uses nix-user-chroot for rootless nix via user namespaces
 # Run: curl -fsSL https://raw.githubusercontent.com/atomic-235/portable/main/setup.sh | bash
 set -euo pipefail
 
 PORTABLE_DIR="${PORTABLE_DIR:-$HOME/portable}"
+NIX_USER_CHROOT_DIR="${NIX_USER_CHROOT_DIR:-$HOME/.nix}"
+BIN_DIR="$HOME/.local/bin"
 
-echo "=== Installing nix (single-user) ==="
-if ! command -v nix &>/dev/null; then
-  # nix installer needs nixbld group + users for builds
-  if ! getent group nixbld &>/dev/null; then
-    groupadd nixbld
-    for i in $(seq 1 10); do
-      useradd -r -g nixbld -G nixbld -d /var/empty -s /usr/sbin/nologin nixbld$i 2>/dev/null || true
-    done
-  fi
-  mkdir -m 0755 /nix 2>/dev/null || true
-  sh <(curl -L https://nixos.org/nix/install) --no-daemon
-  # Source nix profile
-  if [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
-    source "$HOME/.nix-profile/etc/profile.d/nix.sh"
-  fi
+echo "=== Checking user namespace support ==="
+if ! unshare --user --pid echo OK &>/dev/null; then
+  echo "ERROR: User namespaces not available on this system." >&2
+  echo "nix-user-chroot requires unprivileged user namespaces." >&2
+  echo "On Ubuntu 23.10+, this may be blocked by AppArmor." >&2
+  exit 1
+fi
+
+echo "=== Installing nix-user-chroot ==="
+mkdir -p "$BIN_DIR"
+if ! command -v nix-user-chroot &>/dev/null; then
+  ARCH=$(uname -m)
+  case "$ARCH" in
+    x86_64)  NP_ARCH="x86_64-unknown-linux-musl" ;;
+    aarch64) NP_ARCH="aarch64-unknown-linux-musl" ;;
+    *) echo "ERROR: Unsupported arch: $ARCH" >&2; exit 1 ;;
+  esac
+  curl -L "https://github.com/nix-community/nix-user-chroot/releases/latest/download/nix-user-chroot-${NP_ARCH}" \
+    -o "$BIN_DIR/nix-user-chroot"
+  chmod +x "$BIN_DIR/nix-user-chroot"
+fi
+
+echo "=== Installing nix (rootless via nix-user-chroot) ==="
+if [ ! -d "$NIX_USER_CHROOT_DIR/store" ]; then
+  mkdir -m 0755 "$NIX_USER_CHROOT_DIR"
+  nix-user-chroot "$NIX_USER_CHROOT_DIR" bash -c '
+    curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
+  '
 else
-  echo "nix already installed: $(nix --version)"
+  echo "nix already installed in $NIX_USER_CHROOT_DIR"
 fi
 
 echo "=== Enabling flakes ==="
-mkdir -p "$HOME/.config/nix"
-if ! grep -q 'experimental-features' "$HOME/.config/nix/nix.conf" 2>/dev/null; then
-  echo "experimental-features = nix-command flakes" >> "$HOME/.config/nix/nix.conf"
+mkdir -p "$NIX_USER_CHROOT_DIR/etc/nix"
+if ! grep -q 'experimental-features' "$NIX_USER_CHROOT_DIR/etc/nix/nix.conf" 2>/dev/null; then
+  echo "experimental-features = nix-command flakes" >> "$NIX_USER_CHROOT_DIR/etc/nix/nix.conf"
 fi
 
 echo "=== Cloning portable ==="
@@ -41,14 +56,23 @@ else
 fi
 
 echo "=== Applying home-manager config ==="
-cd "$PORTABLE_DIR"
-nix run github:nix-community/home-manager -- \
-  switch --flake .#user --impure -b backup
+nix-user-chroot "$NIX_USER_CHROOT_DIR" bash -lc "
+  cd \"$PORTABLE_DIR\"
+  nix run github:nix-community/home-manager -- switch --flake .#user --impure -b backup
+"
 
 echo ""
 echo "=== Setup complete ==="
 echo "Portable installed to: $PORTABLE_DIR"
-echo "Restart your shell: exec bash -l"
+echo ""
+echo "Nix is installed rootless at: $NIX_USER_CHROOT_DIR"
+echo "All nix/home-manager commands must run inside nix-user-chroot:"
+echo "  nix-user-chroot $NIX_USER_CHROOT_DIR bash -l"
+echo ""
+echo "To enter nix environment automatically, add to ~/.bashrc:"
+echo "  if [ -z \"\$IN_NIX_USER_CHROOT\" ] && command -v nix-user-chroot &>/dev/null; then"
+echo "    exec nix-user-chroot $NIX_USER_CHROOT_DIR bash -l"
+echo "  fi"
 echo ""
 echo "To update later: $PORTABLE_DIR/update.sh"
 echo ""

@@ -1,24 +1,28 @@
 #!/usr/bin/env bash
-# update.sh — zero-effort update for portable environment
+# update.sh — zero-effort update for portable environment (NO ROOT REQUIRED)
 # Run from anywhere: ~/portable/update.sh
 set -euo pipefail
 
-cd "$(dirname "$0")"
+PORTABLE_DIR="$(cd "$(dirname "$0")" && pwd)"
+NIX_USER_CHROOT_DIR="${NIX_USER_CHROOT_DIR:-$HOME/.nix}"
 
 echo "=== Pulling latest portable ==="
-# local.nix is gitignored — no conflicts ever
-git pull --rebase
+git -C "$PORTABLE_DIR" pull --rebase
 
 echo "=== Updating shared submodule ==="
-git submodule update --remote --merge
+git -C "$PORTABLE_DIR" submodule update --remote --merge
 
 echo "=== Updating flake lock ==="
-nix --extra-experimental-features 'nix-command flakes' \
-  flake lock --update-input shared
+nix-user-chroot "$NIX_USER_CHROOT_DIR" bash -lc "
+  cd \"$PORTABLE_DIR\"
+  nix --extra-experimental-features 'nix-command flakes' flake lock --update-input shared
+"
 
 echo "=== Applying home-manager config ==="
-nix run github:nix-community/home-manager -- \
-  switch --flake .#user --impure -b backup
+nix-user-chroot "$NIX_USER_CHROOT_DIR" bash -lc "
+  cd \"$PORTABLE_DIR\"
+  nix run github:nix-community/home-manager -- switch --flake .#user --impure -b backup
+"
 
 echo ""
 echo "=== Update complete ==="
