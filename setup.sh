@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # setup.sh — first-time install on fresh VM
-# Uses Determinate Systems nix-installer (best nix installer, handles everything)
+# Uses Determinate Systems nix-installer
 # Run: curl -fsSL https://raw.githubusercontent.com/atomic-235/portable/main/setup.sh | bash
+#
+# Requires: sudo access (for /nix directory creation)
+# NEVER deletes or modifies user's existing files
 set -uo pipefail
 
 PORTABLE_DIR="${PORTABLE_DIR:-$HOME/portable}"
@@ -10,10 +13,11 @@ PORTABLE_DIR="${PORTABLE_DIR:-$HOME/portable}"
 
 echo "=== Installing nix ==="
 if ! command -v nix &>/dev/null; then
-  curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+  # --init none: works without systemd (Databricks, containers, etc)
+  curl -fsSL https://install.determinate.systems/nix | sh -s -- install linux --init none --no-confirm
   # Source nix env
-  if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+  if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+    . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
   fi
 else
   echo "nix already installed: $(nix --version)"
@@ -51,8 +55,8 @@ cat > "$PORTABLE_DIR/activate.sh" << 'BPEOF'
 # Portable nix environment activation
 # Add this to your ~/.bashrc:
 #   [ -f ~/portable/activate.sh ] && source ~/portable/activate.sh
-if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+  . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
 fi
 BPEOF
 
