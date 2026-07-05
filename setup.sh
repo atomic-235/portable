@@ -57,7 +57,19 @@ echo "=== Applying home-manager config ==="
 cd "$PORTABLE_DIR"
 nix run .#hm -- switch --flake .#user --impure -b backup
 
-# --- step 5: create activation script ---
+# --- step 5: install opencode (prebuilt binary, not nix) ---
+
+echo "=== Installing opencode ==="
+# nixpkgs opencode segfaults on WSL2 — Bun-compiled binary incompatibility
+# Install prebuilt binary from official installer instead
+# https://github.com/anomalyco/opencode/issues/26846
+if ! command -v opencode &>/dev/null; then
+  curl -fsSL https://opencode.ai/install | bash
+else
+  echo "opencode already installed: $(opencode --version 2>&1 || echo 'unknown')"
+fi
+
+# --- step 6: create activation script ---
 
 echo "=== Creating activation script ==="
 cat > "$PORTABLE_DIR/activate.sh" << 'BPEOF'

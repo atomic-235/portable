@@ -18,6 +18,10 @@ nix --extra-experimental-features 'nix-command flakes' \
 echo "=== Applying home-manager config ==="
 nix run "$PORTABLE_DIR"#hm -- switch --flake "$PORTABLE_DIR"#user --impure -b backup
 
+echo "=== Updating opencode ==="
+# nixpkgs opencode segfaults on WSL2 — use prebuilt binary
+curl -fsSL https://opencode.ai/install | bash
+
 echo ""
 echo "=== Update complete ==="
 echo "Restart your shell: exec bash -l"
