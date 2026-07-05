@@ -20,16 +20,10 @@ if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
     sleep 1
   fi
 fi
-[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
 BPEOF
 
 echo "=== Applying home-manager config ==="
 nix run "$PORTABLE_DIR"#hm -- switch --flake "$PORTABLE_DIR"#user --impure -b backup
-
-echo "=== Updating opencode ==="
-# nixpkgs opencode segfaults on WSL2 — use prebuilt binary
-# Don't fail the whole script if install fails (network issues, etc)
-curl -fsSL https://opencode.ai/install | bash || echo "opencode install skipped (already installed or network error)"
 
 echo ""
 echo "=== Update complete ==="
