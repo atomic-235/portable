@@ -69,6 +69,8 @@ echo "=== Applying home-manager config ==="
 # Only remove nvim dir (HM can't overwrite dirs with symlinks)
 # HM -b backup handles all other file conflicts automatically
 rm -rf "$HOME/.config/nvim" 2>/dev/null || true
+# Clear stale nix profiles from previous attempts
+rm -rf "$HOME/.local/state/nix/profiles" 2>/dev/null || true
 "$NUC" "$NIX_USER_CHROOT_DIR" bash -lc "
   cd \"$PORTABLE_DIR\"
   nix run .#hm -- switch --flake .#user --impure -b backup
