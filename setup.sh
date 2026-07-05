@@ -66,6 +66,8 @@ else
 fi
 
 echo "=== Applying home-manager config ==="
+# Remove existing files that conflict with home-manager symlinks
+rm -rf "$HOME/.config/nvim" 2>/dev/null || true
 "$NUC" "$NIX_USER_CHROOT_DIR" bash -lc "
   cd \"$PORTABLE_DIR\"
   nix run .#hm -- switch --flake .#user --impure -b backup
