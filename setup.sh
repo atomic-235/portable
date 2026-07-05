@@ -73,19 +73,23 @@ rm -rf "$HOME/.config" "$HOME/.bashrc" "$HOME/.profile" 2>/dev/null || true
   nix run .#hm -- switch --flake .#user --impure -b backup
 "
 
+echo "=== Adding auto-enter to ~/.bashrc ==="
+BASHRC="$HOME/.bashrc"
+# HM may have created .bashrc, append auto-enter snippet
+if ! grep -q 'IN_NIX_USER_CHROOT' "$BASHRC" 2>/dev/null; then
+  cat >> "$BASHRC" << 'BASHEOF'
+
+# Auto-enter nix-user-chroot for rootless nix
+if [ -z "$IN_NIX_USER_CHROOT" ] && [ -x "$HOME/.local/bin/nix-user-chroot" ] && [ -d "$HOME/.nix/store" ]; then
+  exec "$HOME/.local/bin/nix-user-chroot" "$HOME/.nix" bash -l
+fi
+BASHEOF
+  echo "Added auto-enter snippet to ~/.bashrc"
+fi
+
 echo ""
 echo "=== Setup complete ==="
-echo "Portable installed to: $PORTABLE_DIR"
-echo ""
-echo "Nix is installed rootless at: $NIX_USER_CHROOT_DIR"
-echo "All nix/home-manager commands must run inside nix-user-chroot:"
-echo "  $NUC $NIX_USER_CHROOT_DIR bash -l"
-echo ""
-echo "To enter nix environment automatically, add to ~/.bashrc:"
-echo "  if [ -z \"\$IN_NIX_USER_CHROOT\" ] && [ -x $NUC ]; then"
-echo "    exec $NUC $NIX_USER_CHROOT_DIR bash -l"
-echo "  fi"
-echo ""
+echo "Restart your shell: exec bash -l"
 echo "To update later: $PORTABLE_DIR/update.sh"
 echo ""
 echo "To add work/databricks config: cp $PORTABLE_DIR/local.nix.example $PORTABLE_DIR/local.nix"
