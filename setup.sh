@@ -7,6 +7,7 @@ set -euo pipefail
 PORTABLE_DIR="${PORTABLE_DIR:-$HOME/portable}"
 NIX_USER_CHROOT_DIR="${NIX_USER_CHROOT_DIR:-$HOME/.nix}"
 BIN_DIR="$HOME/.local/bin"
+NUC="$BIN_DIR/nix-user-chroot"
 
 echo "=== Checking user namespace support ==="
 if ! unshare --user --pid echo OK &>/dev/null; then
@@ -18,25 +19,23 @@ fi
 
 echo "=== Installing nix-user-chroot ==="
 mkdir -p "$BIN_DIR"
-export PATH="$BIN_DIR:$PATH"
-if ! command -v nix-user-chroot &>/dev/null; then
+if [ ! -x "$NUC" ]; then
   ARCH=$(uname -m)
   case "$ARCH" in
     x86_64)  NP_ARCH="x86_64-unknown-linux-musl" ;;
     aarch64) NP_ARCH="aarch64-unknown-linux-musl" ;;
     *) echo "ERROR: Unsupported arch: $ARCH" >&2; exit 1 ;;
   esac
-  # Get latest version from GitHub API
   NP_VERSION=$(curl -sL https://api.github.com/repos/nix-community/nix-user-chroot/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
   curl -L "https://github.com/nix-community/nix-user-chroot/releases/download/${NP_VERSION}/nix-user-chroot-bin-${NP_VERSION}-${NP_ARCH}" \
-    -o "$BIN_DIR/nix-user-chroot"
-  chmod +x "$BIN_DIR/nix-user-chroot"
+    -o "$NUC"
+  chmod +x "$NUC"
 fi
 
 echo "=== Installing nix (rootless via nix-user-chroot) ==="
 if [ ! -d "$NIX_USER_CHROOT_DIR/store" ]; then
   mkdir -m 0755 "$NIX_USER_CHROOT_DIR"
-  nix-user-chroot "$NIX_USER_CHROOT_DIR" bash -c '
+  "$NUC" "$NIX_USER_CHROOT_DIR" bash -c '
     curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
   '
 else
@@ -59,7 +58,7 @@ else
 fi
 
 echo "=== Applying home-manager config ==="
-nix-user-chroot "$NIX_USER_CHROOT_DIR" bash -lc "
+"$NUC" "$NIX_USER_CHROOT_DIR" bash -lc "
   cd \"$PORTABLE_DIR\"
   nix run github:nix-community/home-manager -- switch --flake .#user --impure -b backup
 "
@@ -70,11 +69,11 @@ echo "Portable installed to: $PORTABLE_DIR"
 echo ""
 echo "Nix is installed rootless at: $NIX_USER_CHROOT_DIR"
 echo "All nix/home-manager commands must run inside nix-user-chroot:"
-echo "  nix-user-chroot $NIX_USER_CHROOT_DIR bash -l"
+echo "  $NUC $NIX_USER_CHROOT_DIR bash -l"
 echo ""
 echo "To enter nix environment automatically, add to ~/.bashrc:"
-echo "  if [ -z \"\$IN_NIX_USER_CHROOT\" ] && command -v nix-user-chroot &>/dev/null; then"
-echo "    exec nix-user-chroot $NIX_USER_CHROOT_DIR bash -l"
+echo "  if [ -z \"\$IN_NIX_USER_CHROOT\" ] && [ -x $NUC ]; then"
+echo "    exec $NUC $NIX_USER_CHROOT_DIR bash -l"
 echo "  fi"
 echo ""
 echo "To update later: $PORTABLE_DIR/update.sh"
