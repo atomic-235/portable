@@ -16,12 +16,12 @@
   outputs = { self, nixpkgs, home-manager, shared, ... }:
     let
       system = "x86_64-linux";
-      # local.nix is gitignored — import if it exists
-      # Use --impure flag: builtins.pathExists reads the real filesystem
-      # Put work configs, model names, SECRETS_DIR, custom functions there
+      # local.nix is gitignored — nix can't see it in flake source
+      # Use --impure flag + absolute path to read from real filesystem
+      localPath = "${builtins.getEnv "HOME"}/portable/local.nix";
       localModules =
-        if builtins.pathExists ./local.nix
-        then [ (import ./local.nix) ]
+        if builtins.pathExists localPath
+        then [ (import localPath) ]
         else [];
     in
     {
