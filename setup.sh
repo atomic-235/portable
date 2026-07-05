@@ -19,6 +19,9 @@ if ! command -v nix &>/dev/null; then
   if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
     . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
   fi
+  # Start nix daemon (no systemd = no auto-start)
+  sudo nix-daemon &
+  sleep 2
 else
   echo "nix already installed: $(nix --version)"
 fi
@@ -57,6 +60,11 @@ cat > "$PORTABLE_DIR/activate.sh" << 'BPEOF'
 #   [ -f ~/portable/activate.sh ] && source ~/portable/activate.sh
 if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
   . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+  # Start nix daemon if not running (no systemd)
+  if ! pgrep -x nix-daemon &>/dev/null; then
+    sudo nix-daemon &>/dev/null &
+    sleep 1
+  fi
 fi
 BPEOF
 
