@@ -22,6 +22,18 @@ echo "=== Updating opencode ==="
 # nixpkgs opencode segfaults on WSL2 — use prebuilt binary
 curl -fsSL https://opencode.ai/install | bash
 
+echo "=== Regenerating activate.sh ==="
+cat > "$PORTABLE_DIR/activate.sh" << 'BPEOF'
+if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+  . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+  if ! pgrep -x nix-daemon &>/dev/null; then
+    sudo /nix/var/nix/profiles/default/bin/nix-daemon &>/dev/null &
+    sleep 1
+  fi
+fi
+[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
+BPEOF
+
 echo ""
 echo "=== Update complete ==="
 echo "Restart your shell: exec bash -l"
