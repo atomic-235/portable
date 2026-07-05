@@ -9,14 +9,7 @@ echo "=== Pulling latest portable ==="
 git -C "$PORTABLE_DIR" pull --rebase
 
 echo "=== Updating shared submodule ==="
-git -C "$PORTABLE_DIR" submodule update --remote --merge
-
-echo "=== Updating flake lock ==="
-nix --extra-experimental-features 'nix-command flakes' \
-  flake lock --update-input shared "$PORTABLE_DIR"
-
-echo "=== Applying home-manager config ==="
-nix run "$PORTABLE_DIR"#hm -- switch --flake "$PORTABLE_DIR"#user --impure -b backup
+git -C "$PORTABLE_DIR" submodule update --init --recursive
 
 echo "=== Regenerating activate.sh ==="
 cat > "$PORTABLE_DIR/activate.sh" << 'BPEOF'
@@ -29,6 +22,9 @@ if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
 fi
 [ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
 BPEOF
+
+echo "=== Applying home-manager config ==="
+nix run "$PORTABLE_DIR"#hm -- switch --flake "$PORTABLE_DIR"#user --impure -b backup
 
 echo "=== Updating opencode ==="
 # nixpkgs opencode segfaults on WSL2 — use prebuilt binary
