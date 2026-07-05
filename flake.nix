@@ -14,6 +14,15 @@
   };
 
   outputs = { self, nixpkgs, home-manager, shared, ... }:
+    let
+      # local.nix is gitignored — import if it exists
+      # Use --impure flag: builtins.pathExists reads the real filesystem
+      # Put work configs, model names, SECRETS_DIR, custom functions there
+      localModules =
+        if builtins.pathExists ./local.nix
+        then [ (import ./local.nix) ]
+        else [];
+    in
     {
       homeConfigurations.user = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
@@ -49,7 +58,7 @@
           shared.homeManagerModules.delta
           shared.homeManagerModules.packages
           shared.homeManagerModules.tmux
-        ];
+        ] ++ localModules;
       };
     };
 }

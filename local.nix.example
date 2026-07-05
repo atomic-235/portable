@@ -1,0 +1,34 @@
+# local.nix — copy this to local.nix and customize
+# local.nix is gitignored — your changes never conflict with git pull
+#
+# This file is imported by flake.nix ONLY if it exists.
+# Use it for: work-specific configs, model names, secrets paths, custom functions
+
+{ ... }:
+
+{
+  # === Secrets directory ===
+  # Set this if you use with-secrets on this machine
+  # Point it to wherever your sops secrets live
+  programs.bash.initExtra = ''
+    export SECRETS_DIR="$HOME/secrets"
+
+    # === Work / Databricks opencode wrapper ===
+    # No YubiKey on servers — secrets use plain age keys
+    # Model name is private — put it here, not in public repo
+    work-opencode() {
+      command with-secrets work opencode -m "your-org/databricks-model-name" "$@"
+    }
+
+    # === Custom aliases / functions go here ===
+    # These are appended after shared bash config
+  '';
+
+  # === Override session variables ===
+  # home.sessionVariables = {
+  #   MY_VAR = "value";
+  # };
+
+  # === Add extra packages ===
+  # home.packages = [ pkgs.ripgrep ];
+}
