@@ -2,7 +2,8 @@
 # setup.sh — first-time install on fresh VM (NO ROOT REQUIRED)
 # Uses nix-user-chroot for rootless nix via user namespaces
 # Run: curl -fsSL https://raw.githubusercontent.com/atomic-235/portable/main/setup.sh | bash
-set -euo pipefail
+set -uo pipefail
+# NOTE: no `set -e` — we handle errors explicitly to avoid silent exits
 
 PORTABLE_DIR="${PORTABLE_DIR:-$HOME/portable}"
 NIX_USER_CHROOT_DIR="${NIX_USER_CHROOT_DIR:-$HOME/.nix}"
@@ -28,9 +29,11 @@ if [ ! -x "$NUC" ]; then
   esac
   # Hardcoded version — avoids GitHub API rate limits on shared IPs
   NP_VERSION="2.1.1"
+  echo "Downloading nix-user-chroot ${NP_VERSION} for ${NP_ARCH}..."
   if ! curl -fL "https://github.com/nix-community/nix-user-chroot/releases/download/${NP_VERSION}/nix-user-chroot-bin-${NP_VERSION}-${NP_ARCH}" \
     -o "$NUC" 2>&1; then
     echo "ERROR: Failed to download nix-user-chroot ${NP_VERSION}" >&2
+    echo "Check if github.com is reachable from this network." >&2
     exit 1
   fi
   chmod +x "$NUC"
