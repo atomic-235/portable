@@ -41,7 +41,9 @@ if [ ! -x "$NUC" ]; then
 fi
 
 echo "=== Installing nix (rootless via nix-user-chroot) ==="
-if [ ! -d "$NIX_USER_CHROOT_DIR/store" ]; then
+if [ ! -x "$NIX_USER_CHROOT_DIR/profile/bin/nix" ]; then
+  # Clean any broken previous install (nix store files are read-only, may fail)
+  rm -rf "$NIX_USER_CHROOT_DIR" 2>/dev/null || true
   mkdir -m 0755 "$NIX_USER_CHROOT_DIR"
   "$NUC" "$NIX_USER_CHROOT_DIR" bash -c '
     curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
