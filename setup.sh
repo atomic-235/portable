@@ -26,10 +26,15 @@ if [ ! -x "$NUC" ]; then
     aarch64) NP_ARCH="aarch64-unknown-linux-musl" ;;
     *) echo "ERROR: Unsupported arch: $ARCH" >&2; exit 1 ;;
   esac
-  NP_VERSION=$(curl -sL https://api.github.com/repos/nix-community/nix-user-chroot/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
-  curl -L "https://github.com/nix-community/nix-user-chroot/releases/download/${NP_VERSION}/nix-user-chroot-bin-${NP_VERSION}-${NP_ARCH}" \
-    -o "$NUC"
+  # Hardcoded version — avoids GitHub API rate limits on shared IPs
+  NP_VERSION="2.1.1"
+  if ! curl -fL "https://github.com/nix-community/nix-user-chroot/releases/download/${NP_VERSION}/nix-user-chroot-bin-${NP_VERSION}-${NP_ARCH}" \
+    -o "$NUC" 2>&1; then
+    echo "ERROR: Failed to download nix-user-chroot ${NP_VERSION}" >&2
+    exit 1
+  fi
   chmod +x "$NUC"
+  echo "Installed nix-user-chroot ${NP_VERSION}"
 fi
 
 echo "=== Installing nix (rootless via nix-user-chroot) ==="
