@@ -13,15 +13,21 @@ PORTABLE_DIR="${PORTABLE_DIR:-$HOME/portable}"
 
 echo "=== Installing nix ==="
 if ! command -v nix &>/dev/null; then
-  # --init none: works without systemd (Databricks, containers, etc)
-  curl -fsSL https://install.determinate.systems/nix | sh -s -- install linux --init none --no-confirm
+  # Detect systemd — use --init none only if no systemd
+  NIX_INSTALL_ARGS="--no-confirm"
+  if ! pidof systemd &>/dev/null; then
+    NIX_INSTALL_ARGS="linux --init none --no-confirm"
+  fi
+  curl -fsSL https://install.determinate.systems/nix | sh -s -- install $NIX_INSTALL_ARGS
   # Source nix env
   if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
     . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
   fi
-  # Start nix daemon (no systemd = no auto-start)
-  sudo /nix/var/nix/profiles/default/bin/nix-daemon &
-  sleep 2
+  # Start nix daemon if no systemd (systemd auto-starts it)
+  if ! pidof systemd &>/dev/null; then
+    sudo /nix/var/nix/profiles/default/bin/nix-daemon &
+    sleep 2
+  fi
 else
   echo "nix already installed: $(nix --version)"
 fi
