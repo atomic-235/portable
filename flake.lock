@@ -50,11 +50,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783235830,
-        "narHash": "sha256-OyRYyM0dX+kZTo2shngV+r6xKtraYmQYZBLok77hZwk=",
+        "lastModified": 1783239747,
+        "narHash": "sha256-/CG/oaM7+Ry0BVdYuSA98M5P0DdXENcVM2opftm1dgM=",
         "owner": "atomic-235",
         "repo": "shared",
-        "rev": "08d7be4b3caf3b45f09f39155f51a457c8009d6b",
+        "rev": "5de9f480ed92d03f556b325c885120611a389b96",
         "type": "github"
       },
       "original": {

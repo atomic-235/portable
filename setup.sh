@@ -74,26 +74,6 @@ rm -rf "$HOME/.config/nvim" 2>/dev/null || true
   nix run .#hm -- switch --flake .#user --impure -b backup
 "
 
-echo "=== Adding auto-enter to ~/.bashrc ==="
-BASHRC="$HOME/.bashrc"
-# HM may have created .bashrc, append auto-enter snippet
-# Inside chroot: IN_NIX_USER_CHROOT=1 prevents loop, source nix profile + bashrc
-if ! grep -q 'IN_NIX_USER_CHROOT' "$BASHRC" 2>/dev/null; then
-  cat >> "$BASHRC" << 'BASHEOF'
-
-# Auto-enter nix-user-chroot for rootless nix
-if [ -z "$IN_NIX_USER_CHROOT" ] && [ -x "$HOME/.local/bin/nix-user-chroot" ] && [ -d "$HOME/.nix/store" ]; then
-  export IN_NIX_USER_CHROOT=1
-  exec "$HOME/.local/bin/nix-user-chroot" "$HOME/.nix" bash --noprofile --norc -c '
-    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-    [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
-    exec bash -i
-  '
-fi
-BASHEOF
-  echo "Added auto-enter snippet to ~/.bashrc"
-fi
-
 echo ""
 echo "=== Setup complete ==="
 echo "Restart your shell: exec bash -l"
