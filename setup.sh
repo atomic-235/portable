@@ -18,6 +18,7 @@ fi
 
 echo "=== Installing nix-user-chroot ==="
 mkdir -p "$BIN_DIR"
+export PATH="$BIN_DIR:$PATH"
 if ! command -v nix-user-chroot &>/dev/null; then
   ARCH=$(uname -m)
   case "$ARCH" in
