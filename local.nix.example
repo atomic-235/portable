@@ -15,6 +15,15 @@
     default = "your-default-model-id";
   };
 
+  # === Opencode research agent model variants ===
+  # Generates research-*-<suffix> agents for each of the 26 research skills.
+  # Suffix becomes part of agent name: research-red-team-fast, research-cynefin-vision, etc.
+  # Router agent uses these for quick triage, visual input, and cross-model comparison.
+  opencode.variants = {
+    # fast = "provider/fast-model-id";
+    # vision = "provider/vision-model-id";
+  };
+
   # === Secrets directory ===
   # Set this if you use with-secrets on this machine
   # Point it to wherever your sops secrets live
