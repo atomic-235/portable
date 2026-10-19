@@ -105,11 +105,11 @@
         "venice-mcp-server": "venice-mcp-server"
       },
       "locked": {
-        "lastModified": 1792415192,
-        "narHash": "sha256-QJjfcRAzksAcM2845lsopuVhTUEb3dodWB/Tg+68myo=",
+        "lastModified": 1792415493,
+        "narHash": "sha256-+/QE0YcfyOtE+tiEfv73zyGiA5PY3n482Tt9b7X7IZ0=",
         "owner": "atomic-235",
         "repo": "shared",
-        "rev": "f702e4b31d1fe24a25f3777c0cd9715ebd29936c",
+        "rev": "cc802e355bef26c846be33274e60f626dec8ea84",
         "type": "github"
       },
       "original": {
