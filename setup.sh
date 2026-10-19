@@ -39,6 +39,10 @@ mkdir -p "$HOME/.config/nix"
 if ! grep -q 'experimental-features' "$HOME/.config/nix/nix.conf" 2>/dev/null; then
   echo "experimental-features = nix-command flakes" >> "$HOME/.config/nix/nix.conf"
 fi
+if ! grep -q 'atomic-235.cachix.org' "$HOME/.config/nix/nix.conf" 2>/dev/null; then
+  echo "substituters = https://cache.nixos.org/ https://atomic-235.cachix.org" >> "$HOME/.config/nix/nix.conf"
+  echo "trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= atomic-235.cachix.org-1:Gx6jhRRmR4tCQBVde7371zs1muq2n1YHQduaPGe/yFE=" >> "$HOME/.config/nix/nix.conf"
+fi
 
 # --- step 3: clone portable ---
 
