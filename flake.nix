@@ -2,14 +2,14 @@
   description = "Portable terminal environment via home-manager";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Shared owns the nixpkgs pin so its cache-built packages match portable.
+    nixpkgs.follows = "shared/nixpkgs";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     shared = {
       url = "github:atomic-235/shared";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -41,7 +41,6 @@
           inherit system;
           overlays = [
             shared.defaultOverlay
-            shared.overlays.opencode
           ];
         };
         extraSpecialArgs = {

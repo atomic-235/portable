@@ -1,4 +1,4 @@
-name: Build cached packages
+name: Verify cache
 
 on:
   schedule:
@@ -8,13 +8,15 @@ on:
       - "flake.nix"
       - "flake.lock"
       - ".github/workflows/build-cachix.yml"
+  repository_dispatch:
+    types: [shared-updated]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -23,34 +25,35 @@ jobs:
 
       - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31
 
-      - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
-        with:
-          name: atomic-235
-          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-
       - name: Update flake
-        if: github.event_name == 'schedule'
-        run: nix flake update
+        if: github.event_name == 'schedule' || github.event_name == 'repository_dispatch'
+        env:
+          SHARED_REV: ${{ github.event.client_payload.rev }}
+        run: |
+          if [ -n "$SHARED_REV" ]; then
+            nix flake lock --flake . \
+              --override-input shared "github:atomic-235/shared/$SHARED_REV"
+          else
+            nix flake update
+          fi
 
-      - name: Build missing packages
-        id: build
+      - name: Verify packages are cached
         run: |
           packages="lazygit tmux opencode"
-          built=0
+          missing=0
           for p in $packages; do
             out=$(nix eval --impure --raw ".#homeConfigurations.user.pkgs.$p.outPath")
             if nix path-info --store https://atomic-235.cachix.org "$out" >/dev/null 2>&1; then
-              echo "$p: already cached"
+              echo "$p: cached"
             else
-              echo "$p: building"
-              nix build --impure --no-link ".#homeConfigurations.user.pkgs.$p"
-              built=1
+              echo "$p: MISSING"
+              missing=1
             fi
           done
-          echo "built=$built" >> "$GITHUB_OUTPUT"
+          [ "$missing" -eq 0 ]
 
       - name: Commit lock
-        if: github.event_name == 'schedule' && steps.build.outputs.built == '1'
+        if: github.event_name == 'schedule' || github.event_name == 'repository_dispatch'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
