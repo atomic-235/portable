@@ -35,7 +35,7 @@
       homeConfigurations.user = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ shared.defaultOverlay shared.overlays.opencode ];
+          overlays = [ shared.defaultOverlay ];
         };
         extraSpecialArgs = {
           inherit shared;
