@@ -58,7 +58,7 @@ fi
 # --- step 4: apply home-manager ---
 
 echo "=== Applying home-manager config ==="
-cd "$PORTABLE_DIR"
+cd "$PORTABLE_DIR" || exit 1
 nix run .#hm -- switch --flake .#user --impure -b backup
 
 # --- step 5: create activation script ---

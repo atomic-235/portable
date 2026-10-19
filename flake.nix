@@ -13,16 +13,20 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, shared, ... }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      shared,
+      ...
+    }:
     let
       system = "x86_64-linux";
       # local.nix is gitignored — nix can't see it in flake source
       # Use --impure flag + absolute path to read from real filesystem
       localPath = "${builtins.getEnv "HOME"}/portable/local.nix";
-      localModules =
-        if builtins.pathExists localPath
-        then [ (import localPath) ]
-        else [];
+      localModules = if builtins.pathExists localPath then [ (import localPath) ] else [ ];
     in
     {
       # Expose home-manager binary from flake lock — avoids GitHub API calls
@@ -35,7 +39,10 @@
       homeConfigurations.user = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ shared.defaultOverlay shared.overlays.opencode ];
+          overlays = [
+            shared.defaultOverlay
+            shared.overlays.opencode
+          ];
         };
         extraSpecialArgs = {
           inherit shared;
@@ -66,7 +73,8 @@
           shared.homeManagerModules.delta
           shared.homeManagerModules.packages
           shared.homeManagerModules.tmux
-        ] ++ localModules;
+        ]
+        ++ localModules;
       };
     };
 }

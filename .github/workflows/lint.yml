@@ -1,0 +1,39 @@
+name: Lint
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31
+
+      - name: Evaluate Home Manager configuration
+        run: nix eval --impure --raw .#homeConfigurations.user.activationPackage.drvPath
+
+      - name: actionlint
+        run: nix run nixpkgs#actionlint -- .github/workflows/*.yml
+
+      - name: shellcheck
+        run: |
+          mapfile -t files < <(find . -maxdepth 1 -name '*.sh')
+          nix run nixpkgs#shellcheck -- -S warning "${files[@]}"
+
+      - name: nixfmt
+        run: nix run nixpkgs#nixfmt -- --check flake.nix
+
+      - name: gitleaks
+        run: nix run nixpkgs#gitleaks -- detect --no-git --source . --redact --config .gitleaks.toml
+
+      - name: zizmor
+        run: nix run nixpkgs#zizmor -- --format plain .github/workflows
