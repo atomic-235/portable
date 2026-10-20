@@ -65,4 +65,4 @@ jobs:
           fi
           git commit -m "chore: update flake lock"
           git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git push
+          git push --force origin HEAD:refs/heads/ci/flake-lock
