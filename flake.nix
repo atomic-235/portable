@@ -3,7 +3,8 @@
 
   inputs = {
     # Shared owns the nixpkgs pin so its cache-built packages match portable.
-    nixpkgs.follows = "shared/nixpkgs";
+    nixpkgs.follows = "cached/nixpkgs";
+    cached.url = "github:atomic-235/cached";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -19,6 +20,7 @@
       nixpkgs,
       home-manager,
       shared,
+      cached,
       ...
     }:
     let
@@ -41,6 +43,7 @@
           inherit system;
           overlays = [
             shared.defaultOverlay
+            cached.overlays.default
           ];
         };
         extraSpecialArgs = {
