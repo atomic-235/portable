@@ -18,6 +18,27 @@
         "type": "github"
       }
     },
+    "gittop-flake": {
+      "inputs": {
+        "nixpkgs": [
+          "shared",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792775753,
+        "narHash": "sha256-C0yr9iw7cQfAYWKnBCeqm3AH+VNpJYoPGBCMXFZQ9HI=",
+        "owner": "atomic-235",
+        "repo": "gittop-flake",
+        "rev": "5ba3ad7f627dfad079b5138c2f0786464cafefd8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "atomic-235",
+        "repo": "gittop-flake",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -46,11 +67,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792755510,
-        "narHash": "sha256-NK9dkwnweApHDpX9UJnlaEFNW3vc8tCZxk6DYmpQ+tA=",
+        "lastModified": 1792757098,
+        "narHash": "sha256-AU6gkgnhQdocmYLOVz5ov9882O/N4zsD2HGpnAHn8kk=",
         "owner": "atomic-235",
         "repo": "lazygit-flake",
-        "rev": "cbe9200bcb982b13f30f2e408fcdb37eed6b4096",
+        "rev": "4bbcb909ebb93fb1f02f1d1ce7f937b43d2e2810",
         "type": "github"
       },
       "original": {
@@ -99,11 +120,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792750828,
-        "narHash": "sha256-h6u6nMVhpI63o/zrCWwvGOoBDBgRkClNf3EKEbY6xng=",
+        "lastModified": 1792760301,
+        "narHash": "sha256-X0GnJYKhBVqpjvSjbTRyOZ4N3NAbQinBtBIs58N12o8=",
         "owner": "atomic-235",
         "repo": "opencode-flake",
-        "rev": "1cc1c7b205d867532219c34eaf827bd98d597f36",
+        "rev": "e97816aba374256e6d1a5279954b2cffafba639a",
         "type": "github"
       },
       "original": {
@@ -125,19 +146,22 @@
     },
     "shared": {
       "inputs": {
+        "gittop-flake": "gittop-flake",
         "lazygit-flake": "lazygit-flake",
         "nixpkgs": "nixpkgs_2",
         "opencode-flake": "opencode-flake",
         "swls-flake": "swls-flake",
         "tmux-flake": "tmux-flake",
+        "tree-sitter-clingo-flake": "tree-sitter-clingo-flake",
+        "tree-sitter-cypher-flake": "tree-sitter-cypher-flake",
         "venice-mcp-flake": "venice-mcp-flake"
       },
       "locked": {
-        "lastModified": 1792755872,
-        "narHash": "sha256-tOYtYRfYS1dAEJsAoimehLWwYr4dvpoZaVyTvenQp2s=",
+        "lastModified": 1792781431,
+        "narHash": "sha256-ZQEroalPVjjjSkGtUgiiVdKFxaQOxsuCIYFbwk8m0fk=",
         "owner": "atomic-235",
         "repo": "shared",
-        "rev": "0f3eee7ed2fc22a42b109dab48044afc9498ee7f",
+        "rev": "feb75d87dacf26ecde6aa8b60547ee376682efb3",
         "type": "github"
       },
       "original": {
@@ -188,6 +212,48 @@
         "type": "github"
       }
     },
+    "tree-sitter-clingo-flake": {
+      "inputs": {
+        "nixpkgs": [
+          "shared",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792776642,
+        "narHash": "sha256-61WEaevWC7K9zlLrke2ofPAqqii/cRFUW1pSAocV05s=",
+        "owner": "atomic-235",
+        "repo": "tree-sitter-clingo-flake",
+        "rev": "66f39b3992973a04d9110def845f1606a54c73d8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "atomic-235",
+        "repo": "tree-sitter-clingo-flake",
+        "type": "github"
+      }
+    },
+    "tree-sitter-cypher-flake": {
+      "inputs": {
+        "nixpkgs": [
+          "shared",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792776651,
+        "narHash": "sha256-RzT1W3vBE68L20FH16BWyyDb/W3cwEz9ESL8lTl8LEw=",
+        "owner": "atomic-235",
+        "repo": "tree-sitter-cypher-flake",
+        "rev": "0d8bdd1c2cab38941fe5b61a5ba2a5a0638e3d10",
+        "type": "github"
+      },
+      "original": {
+        "owner": "atomic-235",
+        "repo": "tree-sitter-cypher-flake",
+        "type": "github"
+      }
+    },
     "venice-mcp-flake": {
       "inputs": {
         "nixpkgs": [
@@ -196,11 +262,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792751834,
-        "narHash": "sha256-6bYgg2RjO7pCOZwyIuuJZQsVD9wBrMoUk4bwYqM4yws=",
+        "lastModified": 1792761226,
+        "narHash": "sha256-AqeGM0CGChK96KR9Mi678zk7tekhuACKfdFffLXLfu4=",
         "owner": "atomic-235",
         "repo": "venice-mcp-flake",
-        "rev": "2ca943c1f4aa95be8e34c224d88da471afeabeb2",
+        "rev": "9ead49ad67a96f024adff91103536d87616eca43",
         "type": "github"
       },
       "original": {
