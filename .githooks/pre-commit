@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Fast subset of .github/workflows/lint.yml, run on the files being committed.
+# Enable per clone with: git config core.hooksPath .githooks
+set -euo pipefail
+
+staged() { git diff --cached --name-only --diff-filter=ACM -- "$@"; }
+
+mapfile -t nix_files < <(staged '*.nix')
+if ((${#nix_files[@]})); then
+  nix run nixpkgs#nixfmt -- "${nix_files[@]}"
+  git add -- "${nix_files[@]}"
+fi
+
+mapfile -t sh_files < <(staged '*.sh')
+if ((${#sh_files[@]})); then
+  nix run nixpkgs#shellcheck -- -S warning "${sh_files[@]}"
+fi
+
+mapfile -t py_files < <(staged '*.py')
+if ((${#py_files[@]})); then
+  nix run nixpkgs#ruff -- check "${py_files[@]}"
+  nix run nixpkgs#ruff -- format --check "${py_files[@]}"
+fi
+
+mapfile -t workflow_files < <(staged '.github/workflows/*.yml')
+if ((${#workflow_files[@]})); then
+  nix run nixpkgs#actionlint -- "${workflow_files[@]}"
+fi
