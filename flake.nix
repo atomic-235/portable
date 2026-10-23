@@ -2,7 +2,8 @@
   description = "Portable terminal environment via home-manager";
 
   inputs = {
-    # Shared owns the nixpkgs pin so its cache-built packages match portable.
+    # cached owns the nixpkgs pin: it builds the patched packages, so
+    # consumers follow the same revision to guarantee cache hits.
     nixpkgs.follows = "cached/nixpkgs";
     cached.url = "github:atomic-235/cached";
     home-manager = {
@@ -11,6 +12,7 @@
     };
     shared = {
       url = "github:atomic-235/shared";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
