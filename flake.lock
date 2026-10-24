@@ -96,27 +96,6 @@
         "type": "github"
       }
     },
-    "opencode-flake": {
-      "inputs": {
-        "nixpkgs": [
-          "shared",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1792760301,
-        "narHash": "sha256-X0GnJYKhBVqpjvSjbTRyOZ4N3NAbQinBtBIs58N12o8=",
-        "owner": "atomic-235",
-        "repo": "opencode-flake",
-        "rev": "e97816aba374256e6d1a5279954b2cffafba639a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "atomic-235",
-        "repo": "opencode-flake",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "cached": "cached",
@@ -135,7 +114,6 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "opencode-flake": "opencode-flake",
         "swls-flake": "swls-flake",
         "tmux-flake": "tmux-flake",
         "tree-sitter-clingo-flake": "tree-sitter-clingo-flake",
@@ -143,11 +121,11 @@
         "venice-mcp-flake": "venice-mcp-flake"
       },
       "locked": {
-        "lastModified": 1792781431,
-        "narHash": "sha256-ZQEroalPVjjjSkGtUgiiVdKFxaQOxsuCIYFbwk8m0fk=",
+        "lastModified": 1792827462,
+        "narHash": "sha256-klM/eXWleu3nJg9qYPMsBgyuRXzbs4Pm9m9x7RTQhC0=",
         "owner": "atomic-235",
         "repo": "shared",
-        "rev": "feb75d87dacf26ecde6aa8b60547ee376682efb3",
+        "rev": "598e906004e6a9cd302d3e59a1571b3656a2d76a",
         "type": "github"
       },
       "original": {
