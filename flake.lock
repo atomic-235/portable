@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "ai-commit-flake": {
+      "inputs": {
+        "nixpkgs": [
+          "shared",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794470295,
+        "narHash": "sha256-/diK5+VnHvcLB55DX2rCF+yBjjx9wM4ro3nd3+riQIA=",
+        "owner": "atomic-235",
+        "repo": "ai-commit-flake",
+        "rev": "30883caa2515476236942ec1b451e6710e24866b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "atomic-235",
+        "repo": "ai-commit-flake",
+        "type": "github"
+      }
+    },
     "cached": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -109,6 +130,7 @@
     },
     "shared": {
       "inputs": {
+        "ai-commit-flake": "ai-commit-flake",
         "gittop-flake": "gittop-flake",
         "lazygit-flake": "lazygit-flake",
         "nixpkgs": [
@@ -122,11 +144,11 @@
         "venice-mcp-flake": "venice-mcp-flake"
       },
       "locked": {
-        "lastModified": 1794468275,
-        "narHash": "sha256-7H90G22rP+FOESwp1eFm3HDimNyfzFVIMVTYTxoGWGY=",
+        "lastModified": 1794470336,
+        "narHash": "sha256-F/oIGRVlkMddXUAWE51Cn3fyeNhwQIsxXOcmz5rGGqg=",
         "owner": "atomic-235",
         "repo": "shared",
-        "rev": "8e446890b807974ded29af945302d687f1b5c528",
+        "rev": "130c25e22ea81cdbbca0235ed7fbfede1290eccc",
         "type": "github"
       },
       "original": {
@@ -185,11 +207,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794468236,
-        "narHash": "sha256-jMRezuFjvdWFZOuxKStkYTgwD/xko8ONkakPKQ68FL8=",
+        "lastModified": 1794469348,
+        "narHash": "sha256-0RKOnswbEQwgyCmadwWBHnD2DfzBCCSnjHORjHDaVOc=",
         "owner": "atomic-235",
         "repo": "tmux-sessionizer-flake",
-        "rev": "c18ea631e88ade9acd161635c8e3917471414d38",
+        "rev": "3e266b41fc65a31a9407c95320971924f5e0def8",
         "type": "github"
       },
       "original": {
