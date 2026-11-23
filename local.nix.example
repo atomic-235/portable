@@ -46,6 +46,13 @@
   #   MY_VAR = "value";
   # };
 
+  # === Minuet (nvim inline completion) ===
+  # minuet needs an OpenAI-compatible endpoint + key; without both it stays off.
+  # home.sessionVariables = {
+  #   OPENAI_BASE_URL = "https://<host>/serving-endpoints/openai/v1";
+  #   OPENAI_API_KEY = "dapi...";
+  # };
+
   # === Add extra packages ===
   # home.packages = [ pkgs.ripgrep ];
 }

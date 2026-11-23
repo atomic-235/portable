@@ -161,11 +161,11 @@
         "venice-mcp-flake": "venice-mcp-flake"
       },
       "locked": {
-        "lastModified": 1795006740,
-        "narHash": "sha256-/BaZmfJRJnPZLTaMTeCKPNO0lDiVV+dmPJrDk/gPfm4=",
+        "lastModified": 1795422286,
+        "narHash": "sha256-V5nNug74EAqOc1hhcHKSKCXXyuIhmJ6O8pLE0reypig=",
         "owner": "atomic-235",
         "repo": "shared",
-        "rev": "8cb48a0d559a0791388773597a25a0d4f4a29c4b",
+        "rev": "db10d90a85f244557381cbe1c8979d8dd5eeea72",
         "type": "github"
       },
       "original": {
