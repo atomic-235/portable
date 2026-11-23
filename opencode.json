@@ -1,0 +1,608 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "experimental": {
+    "subagent_depth": 2
+  },
+  "mcp": {
+    "thinking": {
+      "type": "local",
+      "command": [
+        "mcp-server-sequential-thinking"
+      ],
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "direnv",
+        "exec",
+        "/home/antonym/projects/personal/browser_agent",
+        "playwright-mcp-run",
+        "--caps=devtools",
+        "--codegen",
+        "typescript",
+        "--save-session",
+        "--output-dir",
+        ".playwright-mcp/output"
+      ],
+      "enabled": true,
+      "environment": {
+        "NO_PROXY": "localhost,127.0.0.1,::1",
+        "WAYLAND_DISPLAY": "wayland-1",
+        "OZONE_PLATFORM": "wayland"
+      }
+    }
+  },
+  "autoupdate": false,
+  "tools": {
+    "edit": true
+  },
+  "plugin": [],
+  "websearch": {
+    "provider": "random"
+  },
+  "enabled_providers": [
+    "ega-databricks-uae",
+    "opencode"
+  ],
+  "provider": {
+    "ega-databricks-uae": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "EGA Databricks UAE",
+      "options": {
+        "baseURL": "{env:DATABRICKS_EGA_UAE_DEV_HOST}/serving-endpoints/anthropic/v1",
+        "authToken": "{env:DATABRICKS_EGA_UAE_DEV_TOKEN}",
+        "timeout": 600000,
+        "setCacheKey": true
+      },
+      "models": {
+        "databricks-claude-fable-5": {
+          "name": "Claude Fable 5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 10,
+            "output": 50,
+            "cache_read": 1
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "databricks-claude-fable-5-1": {
+          "name": "Claude Fable 5.1 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 10,
+            "output": 50,
+            "cache_read": 1
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "databricks-claude-opus-4-7": {
+          "name": "Claude Opus 4.7 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 5,
+            "output": 25,
+            "cache_read": 0.5
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "databricks-claude-opus-4-8": {
+          "name": "Claude Opus 4.8 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 5,
+            "output": 25,
+            "cache_read": 0.5
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "databricks-claude-opus-5": {
+          "name": "Claude Opus 5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 5,
+            "output": 25,
+            "cache_read": 0.5
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "databricks-claude-opus-5-5": {
+          "name": "Claude Opus 5.5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 4,
+            "output": 20,
+            "cache_read": 0.4
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "databricks-claude-opus-4-6": {
+          "name": "Claude Opus 4.6 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 5,
+            "output": 25,
+            "cache_read": 0.5
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "databricks-claude-sonnet-5": {
+          "name": "Claude Sonnet 5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 2,
+            "output": 10,
+            "cache_read": 0.2
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "databricks-claude-sonnet-5-5": {
+          "name": "Claude Sonnet 5.5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 2,
+            "output": 10,
+            "cache_read": 0.2
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "databricks-claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 3,
+            "output": 15,
+            "cache_read": 0.3
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "databricks-claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 3,
+            "output": 15,
+            "cache_read": 0.3
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 64000
+          }
+        },
+        "databricks-claude-haiku-5-5": {
+          "name": "Claude Haiku 5.5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 0.1,
+            "output": 0.5,
+            "cache_read": 0.01
+          },
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "databricks-claude-haiku-4-5": {
+          "name": "Claude Haiku 4.5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 1,
+            "output": 5,
+            "cache_read": 0.1
+          },
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          }
+        },
+        "databricks-claude-opus-4-5": {
+          "name": "Claude Opus 4.5 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 5,
+            "output": 25,
+            "cache_read": 0.5
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "databricks-claude-opus-4-1": {
+          "name": "Claude Opus 4.1 (Databricks UAE)",
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "cost": {
+            "input": 15,
+            "output": 75,
+            "cache_read": 1.5
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        }
+      }
+    }
+  },
+  "model": "ega-databricks-uae/databricks-claude-sonnet-4-6",
+  "permission": {
+    "read": {
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow",
+      "~/.config/opencode/skills/telegram/*": "deny",
+      "opencode/.config/opencode/skills/telegram/*": "deny",
+      "~/.local/share/opencode/strategies/**": "allow"
+    },
+    "external_directory": {
+      "~/.local/share/opencode/strategies/**": "allow"
+    },
+    "bash": {
+      "sops --verbose decrypt": "deny",
+      "mkfs": "deny",
+      "dd if=/dev/zero": "deny",
+      "dd if=/dev/random": "deny",
+      "> /dev/sda": "deny",
+      "chmod -R 777 /": "deny",
+      "chown -R": "deny",
+      "with-secrets telegram": "deny",
+      "with-secrets bitcoin": "deny",
+      "sops decrypt": "deny",
+      "sops -d": "deny",
+      "sops --decrypt": "deny",
+      "sops exec-env": "deny",
+      "sops exec-file": "deny",
+      "age -d": "deny",
+      "age --decrypt": "deny",
+      "gpg --decrypt": "deny",
+      "gpg -d": "deny",
+      "gpg2 --decrypt": "deny",
+      "gpg2 -d": "deny",
+      "ansible-vault decrypt": "deny",
+      "ansible-vault view": "deny",
+      "blackbox_decrypt": "deny",
+      "transcrypt -f": "deny",
+      "git-crypt unlock": "deny"
+    }
+  },
+  "agent": {
+    "router": {
+      "permission": {
+        "task": {
+          "research-cynefin": "allow",
+          "research-io-uncertainty-quadrant": "allow",
+          "research-wrap": "allow",
+          "research-decision-record": "allow",
+          "research-ooda": "allow",
+          "research-premortem": "allow",
+          "research-scientific": "allow",
+          "research-ach": "allow",
+          "research-ppdac": "allow",
+          "research-polya": "allow",
+          "research-investigation": "allow",
+          "research-link-analysis": "allow",
+          "research-design": "allow",
+          "research-microservices": "allow",
+          "research-testing": "allow",
+          "research-first-principles": "allow",
+          "research-inversion": "allow",
+          "research-triz": "allow",
+          "research-toc": "allow",
+          "research-red-team": "allow",
+          "research-hilp": "allow",
+          "research-systems-thinking": "allow",
+          "research-alternative-futures": "allow",
+          "research-coverage-audit": "allow",
+          "research-negotiate": "allow",
+          "research-strategic-interaction": "allow",
+          "research-red-team-medium": "allow",
+          "research-ach-medium": "allow",
+          "research-inversion-medium": "allow",
+          "research-premortem-medium": "allow",
+          "research-cynefin-medium": "allow",
+          "research-wrap-medium": "allow",
+          "research-ooda-medium": "allow",
+          "research-first-principles-medium": "allow",
+          "research-systems-thinking-medium": "allow",
+          "research-toc-medium": "allow",
+          "research-triz-medium": "allow",
+          "research-investigation-medium": "allow",
+          "research-hilp-medium": "allow",
+          "research-link-analysis-medium": "allow",
+          "research-alternative-futures-medium": "allow",
+          "research-negotiate-medium": "allow",
+          "research-scientific-medium": "allow",
+          "research-decision-record-medium": "allow",
+          "research-ppdac-medium": "allow",
+          "research-polya-medium": "allow",
+          "research-io-uncertainty-quadrant-medium": "allow",
+          "research-coverage-audit-medium": "allow",
+          "research-design-medium": "allow",
+          "research-microservices-medium": "allow",
+          "research-testing-medium": "allow",
+          "research-red-team-vision": "allow",
+          "research-ach-vision": "allow",
+          "research-inversion-vision": "allow",
+          "research-premortem-vision": "allow",
+          "research-cynefin-vision": "allow",
+          "research-wrap-vision": "allow",
+          "research-ooda-vision": "allow",
+          "research-first-principles-vision": "allow",
+          "research-systems-thinking-vision": "allow",
+          "research-toc-vision": "allow",
+          "research-triz-vision": "allow",
+          "research-investigation-vision": "allow",
+          "research-hilp-vision": "allow",
+          "research-link-analysis-vision": "allow",
+          "research-alternative-futures-vision": "allow",
+          "research-negotiate-vision": "allow",
+          "research-scientific-vision": "allow",
+          "research-decision-record-vision": "allow",
+          "research-ppdac-vision": "allow",
+          "research-polya-vision": "allow",
+          "research-io-uncertainty-quadrant-vision": "allow",
+          "research-coverage-audit-vision": "allow",
+          "research-design-vision": "allow",
+          "research-microservices-vision": "allow",
+          "research-testing-vision": "allow",
+          "general": "allow",
+          "explore": "allow"
+        }
+      }
+    },
+    "general": {
+      "mode": "subagent",
+      "permission": {
+        "task": {
+          "*": "deny",
+          "router": "allow"
+        },
+        "subagent": {
+          "*": "deny",
+          "router": "allow"
+        }
+      }
+    }
+  },
+  "compaction": {
+    "auto": true
+  },
+  "lsp": {
+    "pyright": {
+      "disabled": true
+    },
+    "basedpyright": {
+      "command": [
+        "basedpyright-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        ".py",
+        ".pyi"
+      ]
+    },
+    "lua-ls": {
+      "command": [
+        "lua-language-server"
+      ],
+      "extensions": [
+        ".lua"
+      ]
+    },
+    "ruff": {
+      "command": [
+        "ruff",
+        "server"
+      ],
+      "extensions": [
+        ".py",
+        ".pyi"
+      ]
+    },
+    "nixd": {
+      "command": [
+        "nixd"
+      ],
+      "extensions": [
+        ".nix"
+      ],
+      "initialization": {
+        "nixpkgs": {
+          "expr": "import <nixpkgs> { }"
+        },
+        "formatting": {
+          "command": [
+            "nixfmt"
+          ]
+        },
+        "options": {
+          "nixos": {
+            "expr": "(builtins.getFlake (toString ./nix)).nixosConfigurations.default.options"
+          },
+          "home-manager": {
+            "expr": "(builtins.getFlake (toString ./nix)).nixosConfigurations.default.options.home-manager.users.type.getSubOptions []"
+          }
+        }
+      }
+    },
+    "tinymist": {
+      "command": [
+        "tinymist",
+        "lsp"
+      ],
+      "extensions": [
+        ".typ",
+        ".typc"
+      ],
+      "initialization": {
+        "formatterMode": "typstyle",
+        "exportPdf": "onSave"
+      }
+    }
+  }
+}

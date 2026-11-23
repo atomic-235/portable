@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Regenerate opencode.json from the dotfiles config, minus Venice.
 #
-# The dotfiles config is the source of truth. Portable has no Venice proxy, so
+# Run this from a machine that has both repos; the output is committed to
+# portable so VMs get it through git and never need dotfiles. The dotfiles
+# config is the source of truth, and portable has no Venice proxy, so
 # `myprovider` (Venice) and everything that depends on it is stripped:
 #   * the provider block and its enabled_providers entry
 #   * the venice-mcp server (`mcp.ai`, which runs under with-nono)
