@@ -51,9 +51,11 @@
       "name": "EGA Databricks UAE",
       "options": {
         "baseURL": "{env:DATABRICKS_EGA_UAE_DEV_HOST}/serving-endpoints/anthropic/v1",
-        "authToken": "{env:DATABRICKS_EGA_UAE_DEV_TOKEN}",
         "timeout": 600000,
-        "setCacheKey": true
+        "setCacheKey": true,
+        "headers": {
+          "Authorization": "Bearer {env:DATABRICKS_EGA_UAE_DEV_TOKEN}"
+        }
       },
       "models": {
         "databricks-claude-fable-5": {

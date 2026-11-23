@@ -33,6 +33,13 @@ jq --slurpfile lsp "$LSP" '
   | del(.mcp.ai)
   | .permission |= with_entries(select(.key | startswith("ai_venice_") | not))
   | .model = "ega-databricks-uae/databricks-claude-sonnet-4-6"
+  # Dotfiles works because the nono proxy injects a bearer token for
+  # *.azuredatabricks.net; portable has no proxy, so send what the proxy
+  # would have sent. `authToken` alone never reached the wire.
+  | .provider["ega-databricks-uae"].options |= (
+      del(.authToken)
+      | .headers = { Authorization: "Bearer {env:DATABRICKS_EGA_UAE_DEV_TOKEN}" }
+    )
   | .lsp = $lsp[0].lsp
 ' "$SRC" >"$OUT"
 
