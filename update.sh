@@ -24,6 +24,14 @@ nix flake update --flake "$PORTABLE_DIR" "${nested[@]}"
 # clean and the next `git pull --rebase` works.
 trap 'git -C "$PORTABLE_DIR" checkout -- flake.lock 2>/dev/null || true' EXIT
 
+echo "=== Regenerating opencode.json (if dotfiles config is present) ==="
+DOTFILES_OPENCODE="$HOME/projects/personal/dotfiles/opencode/.config/opencode/opencode.json"
+if [[ -f "$DOTFILES_OPENCODE" ]]; then
+  "$PORTABLE_DIR/gen-opencode.sh"
+else
+  echo "skipped: $DOTFILES_OPENCODE not found"
+fi
+
 echo "=== Regenerating activate.sh ==="
 cat > "$PORTABLE_DIR/activate.sh" << 'BPEOF'
 if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
