@@ -6,7 +6,8 @@
 # config is the source of truth, and portable has no Venice proxy, so
 # `myprovider` (Venice) and everything that depends on it is stripped:
 #   * the provider block and its enabled_providers entry
-#   * the venice-mcp server (`mcp.ai`, which runs under with-nono)
+#   * all MCP servers (playwright points at a dotfiles path, thinking has no
+#     binary on a fresh VM) and the venice-mcp server (`mcp.ai`, with-nono)
 #   * ai_venice_* tool permissions
 # The default model falls back to the Databricks one portable actually uses.
 # LSP stanzas come from shared/opencode/opencode-lsp.json, same as the dotfiles
@@ -30,7 +31,7 @@ done
 jq --slurpfile lsp "$LSP" '
   .provider |= del(.myprovider)
   | .enabled_providers -= ["myprovider", "venice"]
-  | del(.mcp.ai)
+  | del(.mcp)
   | .permission |= with_entries(select(.key | startswith("ai_venice_") | not))
   | .model = "ega-databricks-uae/databricks-claude-sonnet-4-6"
   # Dotfiles works because the nono proxy injects a bearer token for

@@ -3,36 +3,6 @@
   "experimental": {
     "subagent_depth": 2
   },
-  "mcp": {
-    "thinking": {
-      "type": "local",
-      "command": [
-        "mcp-server-sequential-thinking"
-      ],
-      "enabled": true
-    },
-    "playwright": {
-      "type": "local",
-      "command": [
-        "direnv",
-        "exec",
-        "/home/antonym/projects/personal/browser_agent",
-        "playwright-mcp-run",
-        "--caps=devtools",
-        "--codegen",
-        "typescript",
-        "--save-session",
-        "--output-dir",
-        ".playwright-mcp/output"
-      ],
-      "enabled": true,
-      "environment": {
-        "NO_PROXY": "localhost,127.0.0.1,::1",
-        "WAYLAND_DISPLAY": "wayland-1",
-        "OZONE_PLATFORM": "wayland"
-      }
-    }
-  },
   "autoupdate": false,
   "tools": {
     "edit": true
